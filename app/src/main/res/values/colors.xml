@@ -6,4 +6,7 @@
 
 
     <color name="color_theme">#00F</color>
+
+
+    <color name="color_bg">#220000FF</color>
 </resources>

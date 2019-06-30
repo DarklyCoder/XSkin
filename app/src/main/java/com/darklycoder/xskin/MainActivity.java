@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.darklycoder.xskin.core.base.SkinActivity;
 import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.core.loader.SkinManager;
+import com.darklycoder.xskin.fragments.IndexFragment;
 
 public class MainActivity extends SkinActivity {
 
@@ -25,6 +26,7 @@ public class MainActivity extends SkinActivity {
             SkinManager.getInstance().load("sdcard/skin/skin02-debug.apk");
         });
 
+        getFragmentManager().beginTransaction().replace(R.id.fl_container,new IndexFragment()).commit();
     }
 
 }

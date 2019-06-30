@@ -3,4 +3,6 @@
 
     <color name="color_theme">#F00</color>
 
+    <color name="color_bg">#22FF0000</color>
+
 </resources>
