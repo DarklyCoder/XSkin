@@ -216,8 +216,9 @@ public class SkinManager implements ISkinLoader {
     }
 
     public int getColor(int resId) {
+        int originColor = -1;
         try {
-            int originColor = mContext.get().getResources().getColor(resId);
+            originColor = mContext.get().getResources().getColor(resId);
             if (null == mResources || isDefaultSkin) {
                 return originColor;
             }
@@ -231,12 +232,17 @@ public class SkinManager implements ISkinLoader {
             SkinLog.e(e.getMessage());
         }
 
+        if (-1 != originColor) {
+            return originColor;
+        }
+
         return Color.TRANSPARENT;
     }
 
     public Drawable getDrawable(int resId) {
+        Drawable originDrawable = null;
         try {
-            Drawable originDrawable = mContext.get().getResources().getDrawable(resId);
+            originDrawable = mContext.get().getResources().getDrawable(resId);
             if (null == mResources || isDefaultSkin) {
                 return originDrawable;
             }
@@ -250,7 +256,11 @@ public class SkinManager implements ISkinLoader {
             SkinLog.e(e.getMessage());
         }
 
-        return new ColorDrawable();
+        if (null != originDrawable) {
+            return originDrawable;
+        }
+
+        return new ColorDrawable(Color.TRANSPARENT);
     }
 
     /**

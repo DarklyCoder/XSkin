@@ -1,94 +1,77 @@
 package com.darklycoder.xskin.core.loader;
 
 import android.content.Context;
-import android.content.res.Resources.NotFoundException;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.LayoutInflater.Factory;
+import android.view.LayoutInflater.Factory2;
 import android.view.View;
 
-import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.DynamicAttr;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
 import com.darklycoder.xskin.core.attr.base.SkinItem;
+import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.core.util.ListUtils;
 import com.darklycoder.xskin.core.util.SkinLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkinInflaterFactory implements Factory {
+/**
+ * 自定义InflaterFactory
+ */
+public class SkinInflaterFactory implements Factory2 {
 
     private final static String TAG = "SkinInflaterFactory";
+
     /**
-     * Store the view item that need skin changing in the activity
+     * 存储那些有皮肤更改需求View
      */
     private List<SkinItem> mSkinItems = new ArrayList<>();
+    private AppCompatActivity mActivity;
+
+    public SkinInflaterFactory(AppCompatActivity activity) {
+        this.mActivity = activity;
+    }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        // if this is NOT enable to be skined , simplly skip it
-        SkinLog.i("SkinInflaterFactory", "onCreateView: " + name);
+        return null;
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        SkinLog.i(TAG, "onCreateView: " + name);
+
         boolean isSkinEnable = attrs.getAttributeBooleanValue(SkinConfig.NAMESPACE, SkinConfig.ATTR_SKIN_ENABLE, false);
-        if (!isSkinEnable) {
-            return null;
-        }
+        AppCompatDelegate delegate = mActivity.getDelegate();
 
-        View view = createView(context, name, attrs);
+        View view = delegate.createView(parent, name, context, attrs);
 
-        if (view == null) {
-            return null;
-        }
-
-        parseSkinAttr(context, attrs, view);
-
-        return view;
-    }
-
-    /**
-     * Invoke low-level function for instantiating a view by name. This attempts to
-     * instantiate a view class of the given <var>name</var> found in this
-     * LayoutInflater's ClassLoader.
-     *
-     * @param context
-     * @param name    The full name of the class to be instantiated.
-     * @param attrs   The XML attributes supplied for this instance.
-     * @return View The newly instantiated view, or null.
-     */
-    private View createView(Context context, String name, AttributeSet attrs) {
-        View view = null;
-        try {
-            if (-1 == name.indexOf('.')) {
-                if ("View".equals(name)) {
-                    view = LayoutInflater.from(context).createView(name, "android.view.", attrs);
-                }
-                if (view == null) {
-                    view = LayoutInflater.from(context).createView(name, "android.widget.", attrs);
-                }
-                if (view == null) {
-                    view = LayoutInflater.from(context).createView(name, "android.webkit.", attrs);
-                }
-            } else {
-                view = LayoutInflater.from(context).createView(name, null, attrs);
+        if (isSkinEnable) {
+            // 需要换肤
+            if (null == view) {
+                view = ViewProducer.createViewFromTag(context, name, attrs);
             }
-        } catch (Exception e) {
-            SkinLog.e("error while create " + name + " : " + e.getMessage());
-            view = null;
+
+            if (null == view) {
+                return null;
+            }
+
+            parseSkinAttr(context, attrs, view);
         }
+
         return view;
     }
 
     /**
-     * Collect skin able tag such as background , textColor and so on
-     *
-     * @param context
-     * @param attrs
-     * @param view
+     * 收集换肤view
      */
     private void parseSkinAttr(Context context, AttributeSet attrs, View view) {
         SkinLog.d(TAG, "parseSkinAttr()");
         List<SkinAttr> viewAttrs = new ArrayList<>();
+
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             String attrName = attrs.getAttributeName(i);
             String attrValue = attrs.getAttributeValue(i);
@@ -104,22 +87,26 @@ public class SkinInflaterFactory implements Factory {
                     String entryName = context.getResources().getResourceEntryName(id);
                     String typeName = context.getResources().getResourceTypeName(id);
                     SkinAttr mSkinAttr = AttrFactory.get(attrName, id, entryName, typeName);
+
                     SkinLog.d(TAG, "mSkinAttr = " + mSkinAttr);
-                    if (mSkinAttr != null) {
+
+                    if (null != mSkinAttr) {
                         viewAttrs.add(mSkinAttr);
                     }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                } catch (NotFoundException e) {
-                    e.printStackTrace();
+
+                } catch (Exception e) {
+                    SkinLog.e(e.getMessage());
                 }
             }
         }
+
+        SkinLog.d(TAG, "viewAttrs = " + viewAttrs.size());
 
         if (!ListUtils.isEmpty(viewAttrs)) {
             SkinItem skinItem = new SkinItem();
             skinItem.view = view;
             skinItem.attrs = viewAttrs;
+
             SkinLog.d(TAG, "skinItem = " + skinItem);
 
             addSkinView(skinItem);

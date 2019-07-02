@@ -1,7 +1,8 @@
 package com.darklycoder.xskin.core.base;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.view.LayoutInflaterCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.darklycoder.xskin.core.attr.base.DynamicAttr;
@@ -13,7 +14,7 @@ import com.darklycoder.xskin.core.util.SkinLog;
 
 import java.util.List;
 
-public class SkinActivity extends Activity implements ISkinUpdate, IDynamicNewView {
+public class SkinActivity extends AppCompatActivity implements ISkinUpdate, IDynamicNewView {
     private final static String TAG = "SkinActivity";
     /**
      * Whether response to skin changing after create
@@ -26,8 +27,8 @@ public class SkinActivity extends Activity implements ISkinUpdate, IDynamicNewVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SkinLog.d(TAG, "onCreate() isExternalSkin() = " + SkinManager.getInstance().isExternalSkin());
-        mSkinInflaterFactory = new SkinInflaterFactory();
-        getLayoutInflater().setFactory(mSkinInflaterFactory);
+        mSkinInflaterFactory = new SkinInflaterFactory(this);
+        LayoutInflaterCompat.setFactory2(getLayoutInflater(), mSkinInflaterFactory);
     }
 
     @Override
@@ -45,10 +46,10 @@ public class SkinActivity extends Activity implements ISkinUpdate, IDynamicNewVi
         mSkinInflaterFactory.clean();
     }
 
-	protected void onThemeChanged(String theme) {
-	    SkinLog.d(TAG, "onThemeChanged(" + theme + ")");
+    protected void onThemeChanged(String theme) {
+        SkinLog.d(TAG, "onThemeChanged(" + theme + ")");
 //	    SkinManager.getInstance().load(getCurrentTheme());
-	}
+    }
 
     /**
      * dynamic add a skin view

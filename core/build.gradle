@@ -18,7 +18,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.1"
     }
 
     buildTypes {
@@ -48,7 +48,7 @@ publish {
     userOrg = 'darklycoder'
     groupId = 'com.darklycoder.lib'
     artifactId = 'XSkin'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     desc = 'Android动态换肤框架'
     website = 'https://github.com/DarklyCoder/XSkin'
 }
