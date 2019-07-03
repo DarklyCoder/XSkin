@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 
 import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.core.listener.ILoaderListener;
@@ -25,14 +26,19 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 皮肤管理
+ */
 public class SkinManager implements ISkinLoader {
 
     private List<ISkinUpdate> skinObservers;
     private WeakReference<Context> mContext;
+
     private String skinPackageName;
     private Resources mResources;
     private String skinPath;
     private boolean isDefaultSkin = false;
+    private float baseInch = 0f;
 
     private SkinManager() {
     }
@@ -46,9 +52,7 @@ public class SkinManager implements ISkinLoader {
     }
 
     /**
-     * whether the skin being used is from external .skin file
-     *
-     * @return is external skin = true
+     * 判断是否正在使用外部皮肤
      */
     public boolean isExternalSkin() {
         return !isDefaultSkin && mResources != null;
@@ -74,18 +78,18 @@ public class SkinManager implements ISkinLoader {
     /**
      * 初始化
      */
-    public void init(Context context, String skinPackagePath) {
-        SkinLog.i("init (" + skinPackagePath + ")");
-        mContext = new WeakReference<>(context.getApplicationContext());
+    public void init(Context context) {
+        init(context, 0);
+    }
 
-        if (TextUtils.isEmpty(skinPackagePath) || TextUtils.equals(skinPackagePath, SkinConfig.DEFAULT_SKIN)) {
-            // 使用内置皮肤
-            isDefaultSkin = true;
-            mResources = mContext.get().getResources();
-            return;
-        }
-
-        load(skinPackagePath);
+    /**
+     * 初始化
+     *
+     * @param baseInch 设计稿尺寸
+     */
+    public void init(Context context, float baseInch) {
+        this.mContext = new WeakReference<>(context.getApplicationContext());
+        this.baseInch = baseInch;
     }
 
     /**
@@ -98,18 +102,18 @@ public class SkinManager implements ISkinLoader {
     /**
      * 加载皮肤
      */
-    public void load(String skinPackagePath, final ILoaderListener callback) {
+    public void load(String skinPackagePath, ILoaderListener callback) {
         SkinLog.i("load (" + skinPackagePath + ")");
 
-        MyAsyncTask asyncTask = new MyAsyncTask(callback);
-        asyncTask.execute(skinPackagePath);
+        LoadSkinAsyncTask mSkinTask = new LoadSkinAsyncTask(callback);
+        mSkinTask.execute(skinPackagePath);
     }
 
-    private static class MyAsyncTask extends AsyncTask<String, Void, Resources> {
+    private static class LoadSkinAsyncTask extends AsyncTask<String, Void, Resources> {
 
         private WeakReference<ILoaderListener> callback;
 
-        MyAsyncTask(ILoaderListener callback) {
+        LoadSkinAsyncTask(ILoaderListener callback) {
             this.callback = new WeakReference<>(callback);
         }
 
@@ -172,6 +176,11 @@ public class SkinManager implements ISkinLoader {
                 Resources superRes = getInstance().mContext.get().getResources();
                 Resources skinResource = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
 
+                // 判断是否需要修改分辨率
+                if (getInstance().baseInch > 0) {
+                    setCustomDensity(skinResource.getDisplayMetrics(), skinResource);
+                }
+
                 getInstance().skinPackageName = pmInfo.packageName;
                 getInstance().skinPath = skinPkgPath;
                 getInstance().isDefaultSkin = false;
@@ -184,6 +193,25 @@ public class SkinManager implements ISkinLoader {
 
             return null;
         }
+
+        private void setCustomDensity(DisplayMetrics metrics, Resources resources) {
+            try {
+                float density = metrics.density;
+                float scaledDensity = metrics.scaledDensity;
+                float targetDensity = metrics.widthPixels / getInstance().baseInch;
+                float targetScaledDensity = targetDensity * (scaledDensity / density);
+                int targetDensityDpi = (int) (160f * targetDensity);
+
+                DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+                displayMetrics.density = targetDensity;
+                displayMetrics.scaledDensity = targetScaledDensity;
+                displayMetrics.densityDpi = targetDensityDpi;
+
+            } catch (Exception e) {
+                SkinLog.e(e.getMessage());
+            }
+        }
+
     }
 
     @Override
@@ -214,6 +242,9 @@ public class SkinManager implements ISkinLoader {
             observer.onThemeUpdate();
         }
     }
+
+
+    /***********动态获取资源************/
 
     public int getColor(int resId) {
         int originColor = -1;
@@ -313,4 +344,5 @@ public class SkinManager implements ISkinLoader {
         int[][] states = new int[1][1];
         return new ColorStateList(states, new int[]{mContext.get().getResources().getColor(resId)});
     }
+
 }

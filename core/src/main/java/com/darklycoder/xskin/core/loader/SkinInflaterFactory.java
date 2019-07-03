@@ -131,7 +131,7 @@ public class SkinInflaterFactory implements Factory2 {
 
     public void dynamicAddSkinEnableView(Context context, View view, List<DynamicAttr> pDAttrs) {
         SkinLog.d(TAG, "dynamicAddSkinEnableView(" + view + ")");
-        List<SkinAttr> viewAttrs = new ArrayList<SkinAttr>();
+        List<SkinAttr> viewAttrs = new ArrayList<>();
         SkinItem skinItem = new SkinItem();
         skinItem.view = view;
 
