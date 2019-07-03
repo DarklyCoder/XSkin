@@ -21,10 +21,15 @@ import com.darklycoder.xskin.core.attr.TextColorHintAttr;
 import com.darklycoder.xskin.core.attr.TextCursorDrawableAttr;
 import com.darklycoder.xskin.core.attr.ThumbAttr;
 
+import java.util.HashMap;
+
 public class AttrFactory {
 
+    // 额外拓展支持的属性
+    private static HashMap<String, SkinAttr> extAttr = new HashMap<>();
+
     /**
-     * 属性
+     * 内置支持的属性
      */
     public enum Attr {
         BACKGROUND("background"),
@@ -92,64 +97,75 @@ public class AttrFactory {
 
     public static SkinAttr get(String attrName, int attrValueRefId, String attrValueRefName, String typeName) {
         SkinAttr mSkinAttr;
-        switch (Attr.byName(attrName)) {
-            case BACKGROUND:
-                mSkinAttr = new BackgroundAttr();
-                break;
-            case TEXT_COLOR:
-                mSkinAttr = new TextColorAttr();
-                break;
-            case TEXT_COLOR_HINT:
-                mSkinAttr = new TextColorHintAttr();
-                break;
-            case TEXT_COLOR_HINT_LIGHT:
-                mSkinAttr = new TextColorHighlightAttr();
-                break;
-            case TEXT_CURSOR_DRAWABLE:
-                mSkinAttr = new TextCursorDrawableAttr();
-                break;
-            case LIST_SELECTOR:
-                mSkinAttr = new ListSelectorAttr();
-                break;
-            case DIVIDER:
-                mSkinAttr = new DividerAttr();
-                break;
-            case SRC:
-                mSkinAttr = new SrcAttr();
-                break;
-            case DRAWABLE_LEFT:
-                mSkinAttr = new DrawableLeftAttr();
-                break;
-            case DRAWABLE_TOP:
-                mSkinAttr = new DrawableTopAttr();
-                break;
-            case DRAWABLE_RIGHT:
-                mSkinAttr = new DrawableRightAttr();
-                break;
-            case DRAWABLE_BOTTOM:
-                mSkinAttr = new DrawableBottomAttr();
-                break;
-            case DRAWABLE_START:
-                mSkinAttr = new DrawableStartAttr();
-                break;
-            case DRAWABLE_END:
-                mSkinAttr = new DrawableEndAttr();
-                break;
-            case PROGRESS_DRAWABLE:
-                mSkinAttr = new ProgressDrawableAttr();
-                break;
-            case INDETERMINATE_DRAWABLE:
-                mSkinAttr = new IndeterminateDrawableAttr();
-                break;
-            case THUMB:
-                mSkinAttr = new ThumbAttr();
-                break;
-            case BUTTON:
-                mSkinAttr = new ButtonAttr();
-                break;
-            case NONE:
-            default:
+
+        if (extAttr.containsKey(attrName)) {
+            // 拓展属性支持
+            mSkinAttr = extAttr.get(attrName);
+
+            if (null == mSkinAttr) {
                 return null;
+            }
+
+        } else {
+            switch (Attr.byName(attrName)) {
+                case BACKGROUND:
+                    mSkinAttr = new BackgroundAttr();
+                    break;
+                case TEXT_COLOR:
+                    mSkinAttr = new TextColorAttr();
+                    break;
+                case TEXT_COLOR_HINT:
+                    mSkinAttr = new TextColorHintAttr();
+                    break;
+                case TEXT_COLOR_HINT_LIGHT:
+                    mSkinAttr = new TextColorHighlightAttr();
+                    break;
+                case TEXT_CURSOR_DRAWABLE:
+                    mSkinAttr = new TextCursorDrawableAttr();
+                    break;
+                case LIST_SELECTOR:
+                    mSkinAttr = new ListSelectorAttr();
+                    break;
+                case DIVIDER:
+                    mSkinAttr = new DividerAttr();
+                    break;
+                case SRC:
+                    mSkinAttr = new SrcAttr();
+                    break;
+                case DRAWABLE_LEFT:
+                    mSkinAttr = new DrawableLeftAttr();
+                    break;
+                case DRAWABLE_TOP:
+                    mSkinAttr = new DrawableTopAttr();
+                    break;
+                case DRAWABLE_RIGHT:
+                    mSkinAttr = new DrawableRightAttr();
+                    break;
+                case DRAWABLE_BOTTOM:
+                    mSkinAttr = new DrawableBottomAttr();
+                    break;
+                case DRAWABLE_START:
+                    mSkinAttr = new DrawableStartAttr();
+                    break;
+                case DRAWABLE_END:
+                    mSkinAttr = new DrawableEndAttr();
+                    break;
+                case PROGRESS_DRAWABLE:
+                    mSkinAttr = new ProgressDrawableAttr();
+                    break;
+                case INDETERMINATE_DRAWABLE:
+                    mSkinAttr = new IndeterminateDrawableAttr();
+                    break;
+                case THUMB:
+                    mSkinAttr = new ThumbAttr();
+                    break;
+                case BUTTON:
+                    mSkinAttr = new ButtonAttr();
+                    break;
+                case NONE:
+                default:
+                    return null;
+            }
         }
 
         mSkinAttr.attrName = attrName;
@@ -163,7 +179,14 @@ public class AttrFactory {
      * 是否是支持的属性
      */
     public static boolean isSupportedAttr(String attrName) {
-        return Attr.NONE != Attr.byName(attrName);
+        return extAttr.containsKey(attrName) || Attr.NONE != Attr.byName(attrName);
+    }
+
+    /**
+     * 添加额外属性
+     */
+    public static void addExtAttr(String attrName, SkinAttr attr) {
+        extAttr.put(attrName, attr);
     }
 
 }

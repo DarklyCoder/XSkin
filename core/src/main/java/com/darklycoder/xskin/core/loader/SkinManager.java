@@ -58,11 +58,6 @@ public class SkinManager implements ISkinLoader {
         return !isDefaultSkin && mResources != null;
     }
 
-    /**
-     * get current skin path
-     *
-     * @return current skin path
-     */
     public String getSkinPath() {
         return skinPath;
     }
@@ -292,6 +287,22 @@ public class SkinManager implements ISkinLoader {
         }
 
         return new ColorDrawable(Color.TRANSPARENT);
+    }
+
+    public int getDrawableResId(int resId) {
+        return getResId(resId, "drawable");
+    }
+
+    public int getResId(int resId, String defType) {
+        try {
+            String resName = mContext.get().getResources().getResourceEntryName(resId);
+            return mResources.getIdentifier(resName, defType, skinPackageName);
+
+        } catch (Exception e) {
+            SkinLog.e(e.getMessage());
+        }
+
+        return resId;
     }
 
     /**
