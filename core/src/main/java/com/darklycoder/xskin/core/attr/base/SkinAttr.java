@@ -1,44 +1,41 @@
 package com.darklycoder.xskin.core.attr.base;
 
-
 import android.support.annotation.NonNull;
 import android.view.View;
 
 /**
- * 属性
+ * 皮肤属性
  */
 public abstract class SkinAttr {
 
     /**
-     * name of the attr, ex: background or textSize or textColor
+     * 属性的名称，例如: "color" or "src"
      */
     public String attrName;
     /**
-     * id of the attr value refered to, normally is [2130745655]
+     * 属性值对应的资源索引id
      */
     public int attrValueRefId;
     /**
-     * entry name of the value , such as [app_exit_btn_background]
+     * 属性对应的值，例如: "color_dark"
      */
     public String attrValueRefName;
     /**
-     * type of the value , such as color or drawable
+     * 属性对应的类型
      */
     public AttrFactory.ResType attrValueType;
 
     /**
-     * Use to apply view with new TypedValue
-     *
-     * @param view
+     * 应用皮肤更换
      */
     public abstract void apply(View view);
 
     @NonNull
     @Override
     public String toString() {
-        return "SkinAttr \n[ attrName=" + attrName + ",\n"
-                + "  attrValueRefId=" + attrValueRefId + ",\n"
-                + "  attrValueRefName=" + attrValueRefName + ",\n"
+        return "SkinAttr [ attrName=" + attrName + ","
+                + "  attrValueRefId=" + attrValueRefId + ","
+                + "  attrValueRefName=" + attrValueRefName + ","
                 + "  attrValueTypeName=" + attrValueType
                 + " ]";
     }

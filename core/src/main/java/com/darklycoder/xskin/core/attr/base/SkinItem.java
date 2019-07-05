@@ -3,15 +3,18 @@ package com.darklycoder.xskin.core.attr.base;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.darklycoder.xskin.core.util.ListUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class SkinItem {
 
+    /**
+     * 需要换肤的view
+     */
     public View view;
-
+    /**
+     * 需要换肤的属性
+     */
     public List<SkinAttr> attrs;
 
     public SkinItem() {
@@ -19,7 +22,7 @@ public class SkinItem {
     }
 
     public void apply() {
-        if (ListUtils.isEmpty(attrs)) {
+        if (null == attrs || attrs.size() <= 0) {
             return;
         }
 
@@ -29,7 +32,7 @@ public class SkinItem {
     }
 
     public void clean() {
-        if (ListUtils.isEmpty(attrs)) {
+        if (null == attrs || attrs.size() <= 0) {
             return;
         }
 

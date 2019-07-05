@@ -6,8 +6,11 @@ import android.widget.TextView;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
+import com.darklycoder.xskin.core.SkinManager;
 
+/**
+ * 支持 "drawableLeft" 属性
+ */
 public class DrawableLeftAttr extends SkinAttr {
 
     @Override
@@ -17,7 +20,9 @@ public class DrawableLeftAttr extends SkinAttr {
 
             if (attrValueType == AttrFactory.ResType.DRAWABLE) {
                 Drawable drawableLeft = SkinManager.getInstance().getDrawable(attrValueRefId);
-                textView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+
+                Drawable[] drawables = textView.getCompoundDrawables();
+                textView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, drawables[1], drawables[2], drawables[3]);
             }
         }
     }

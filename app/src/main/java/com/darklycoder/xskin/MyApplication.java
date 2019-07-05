@@ -2,8 +2,7 @@ package com.darklycoder.xskin;
 
 import android.app.Application;
 
-import com.darklycoder.xskin.core.config.SkinConfig;
-import com.darklycoder.xskin.core.loader.SkinManager;
+import com.darklycoder.xskin.core.SkinManager;
 
 public class MyApplication extends Application {
 
@@ -11,7 +10,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        SkinManager.getInstance().init(this, SkinConfig.DEFAULT_SKIN);
+        SkinManager.getInstance().init(this);
     }
 
 }

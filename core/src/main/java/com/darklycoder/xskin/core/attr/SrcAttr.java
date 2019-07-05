@@ -1,14 +1,15 @@
 package com.darklycoder.xskin.core.attr;
 
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
-import com.darklycoder.xskin.core.util.SkinLog;
+import com.darklycoder.xskin.core.SkinManager;
 
+/**
+ * 支持 ImageView 的 "src" 属性
+ */
 public class SrcAttr extends SkinAttr {
 
     @Override
@@ -18,17 +19,11 @@ public class SrcAttr extends SkinAttr {
 
             switch (attrValueType) {
                 case COLOR:
-                    int color = SkinManager.getInstance().getColor(attrValueRefId);
-                    ColorDrawable colorDrawable = new ColorDrawable(color);
-                    imageView.setImageDrawable(colorDrawable);
-                    SkinLog.i("attr", "apply: SrcAttr - " + attrValueType);
+                    imageView.setImageDrawable(new ColorDrawable(SkinManager.getInstance().getColor(attrValueRefId)));
                     break;
 
                 case DRAWABLE:
-                    Drawable drawable = SkinManager.getInstance().getDrawable(attrValueRefId);
-                    imageView.setImageDrawable(drawable);
-                    SkinLog.i("attr", "apply: SrcAttr - " + attrValueType + ": " + drawable);
-                    SkinLog.i("attr", this.attrValueRefName + " 是否可变换状态? : " + drawable.isStateful());
+                    imageView.setImageDrawable(SkinManager.getInstance().getDrawable(attrValueRefId));
                     break;
 
                 default:

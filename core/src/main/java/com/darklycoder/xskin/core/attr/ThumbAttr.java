@@ -1,13 +1,15 @@
 package com.darklycoder.xskin.core.attr;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.SeekBar;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
+import com.darklycoder.xskin.core.SkinManager;
 
+/**
+ * 支持 SeekBar 的 "thumb"属性
+ */
 public class ThumbAttr extends SkinAttr {
 
     @Override
@@ -16,8 +18,7 @@ public class ThumbAttr extends SkinAttr {
             SeekBar seekBar = (SeekBar) view;
 
             if (attrValueType == AttrFactory.ResType.DRAWABLE) {
-                Drawable thumb = SkinManager.getInstance().getDrawable(attrValueRefId);
-                seekBar.setThumb(thumb);
+                seekBar.setThumb(SkinManager.getInstance().getDrawable(attrValueRefId));
             }
         }
     }

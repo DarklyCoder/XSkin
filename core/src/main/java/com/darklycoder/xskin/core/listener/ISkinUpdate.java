@@ -1,10 +1,11 @@
 package com.darklycoder.xskin.core.listener;
 
 /**
- * Call back when theme has changed </br>
- * Normally implements by activity of fragment
+ * 皮肤更新回调，一般 Activity 或者 Fragment 实现此回调
  */
 public interface ISkinUpdate {
 
-	void onThemeUpdate();	
+    int getKey();
+
+    void onThemeUpdate();
 }

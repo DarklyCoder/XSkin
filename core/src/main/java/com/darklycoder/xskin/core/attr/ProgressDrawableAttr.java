@@ -1,12 +1,11 @@
 package com.darklycoder.xskin.core.attr;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
+import com.darklycoder.xskin.core.SkinManager;
 
 public class ProgressDrawableAttr extends SkinAttr {
 
@@ -16,8 +15,7 @@ public class ProgressDrawableAttr extends SkinAttr {
             ProgressBar progressBar = (ProgressBar) view;
 
             if (attrValueType == AttrFactory.ResType.DRAWABLE) {
-                Drawable progressDrawable = SkinManager.getInstance().getDrawable(attrValueRefId);
-                progressBar.setProgressDrawable(progressDrawable);
+                progressBar.setProgressDrawable(SkinManager.getInstance().getDrawable(attrValueRefId));
             }
         }
     }

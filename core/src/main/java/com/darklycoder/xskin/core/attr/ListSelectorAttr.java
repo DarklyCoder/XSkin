@@ -4,8 +4,7 @@ import android.view.View;
 import android.widget.AbsListView;
 
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
-import com.darklycoder.xskin.core.util.SkinLog;
+import com.darklycoder.xskin.core.SkinManager;
 
 public class ListSelectorAttr extends SkinAttr {
 
@@ -17,12 +16,12 @@ public class ListSelectorAttr extends SkinAttr {
             switch (attrValueType) {
                 case COLOR:
                     absListView.setSelector(SkinManager.getInstance().getColor(attrValueRefId));
-                    SkinLog.i("attr", "apply: ListSelectorAttr - " + attrValueType);
                     break;
+
                 case DRAWABLE:
                     absListView.setSelector(SkinManager.getInstance().getDrawable(attrValueRefId));
-                    SkinLog.i("attr", "apply: ListSelectorAttr - " + attrValueType);
                     break;
+
                 default:
                     break;
             }

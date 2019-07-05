@@ -1,44 +1,35 @@
-package com.darklycoder.xskin.core.loader;
+package com.darklycoder.xskin.core;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
+import android.util.SparseArray;
 
-import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.core.listener.ILoaderListener;
 import com.darklycoder.xskin.core.listener.ISkinLoader;
 import com.darklycoder.xskin.core.listener.ISkinUpdate;
+import com.darklycoder.xskin.core.loader.LoadSdSkinTask;
 import com.darklycoder.xskin.core.util.SkinLog;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 皮肤管理
  */
 public class SkinManager implements ISkinLoader {
 
-    private List<ISkinUpdate> skinObservers;
-    private WeakReference<Context> mContext;
+    public WeakReference<Context> mContext;
+    private SparseArray<WeakReference<ISkinUpdate>> skinObservers;
 
-    private String skinPackageName;
-    private Resources mResources;
-    private String skinPath;
-    private boolean isDefaultSkin = false;
-    private float baseInch = 0f;
+    public String skinPackageName;
+    public Resources mResources;
+    public String skinPath;
+    public boolean isDefaultSkin = false;
+    public int baseInch = 0;
 
     private SkinManager() {
     }
@@ -80,164 +71,71 @@ public class SkinManager implements ISkinLoader {
     /**
      * 初始化
      *
-     * @param baseInch 设计稿尺寸
+     * @param baseInch 设计稿尺寸(dp)
      */
-    public void init(Context context, float baseInch) {
+    public void init(Context context, int baseInch) {
         this.mContext = new WeakReference<>(context.getApplicationContext());
         this.baseInch = baseInch;
     }
 
     /**
-     * 加载皮肤
+     * 加载SD外置皮肤
+     *
+     * @param skinPath 皮肤包路径
      */
-    public void load(String skinPackagePath) {
-        load(skinPackagePath, null);
+    public void load(String skinPath) {
+        load(skinPath, null);
     }
 
     /**
-     * 加载皮肤
+     * 加载SD外置皮肤
      */
-    public void load(String skinPackagePath, ILoaderListener callback) {
-        SkinLog.i("load (" + skinPackagePath + ")");
-
-        LoadSkinAsyncTask mSkinTask = new LoadSkinAsyncTask(callback);
-        mSkinTask.execute(skinPackagePath);
+    public void load(String skinPath, ILoaderListener callback) {
+        LoadSdSkinTask skinTask = new LoadSdSkinTask(callback);
+        skinTask.execute(skinPath);
     }
 
-    private static class LoadSkinAsyncTask extends AsyncTask<String, Void, Resources> {
-
-        private WeakReference<ILoaderListener> callback;
-
-        LoadSkinAsyncTask(ILoaderListener callback) {
-            this.callback = new WeakReference<>(callback);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            SkinLog.i("onPreExecute()");
-            if (null != callback && null != callback.get()) {
-                callback.get().onStart();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Resources result) {
-            SkinLog.i("onPostExecute isDefaultSkin = " + (null == result));
-
-            getInstance().mResources = result;
-            if (null != result) {
-                getInstance().notifySkinUpdate();
-
-                if (null != callback && null != callback.get()) {
-                    callback.get().onSuccess();
-                }
-                return;
-            }
-
-            getInstance().isDefaultSkin = true;
-            if (null != callback && null != callback.get()) {
-                callback.get().onFailed();
-            }
-        }
-
-        @Override
-        protected Resources doInBackground(String... params) {
-            SkinLog.i("doInBackground()");
-
-            if (null == params || params.length <= 0) {
-                return null;
-            }
-
-            String skinPkgPath = params[0];
-
-            try {
-                if (TextUtils.isEmpty(skinPkgPath) || TextUtils.equals(skinPkgPath, SkinConfig.DEFAULT_SKIN)) {
-                    getInstance().isDefaultSkin = true;
-                    return getInstance().mContext.get().getResources();
-                }
-
-                File file = new File(skinPkgPath);
-                if (!file.exists()) {
-                    return null;
-                }
-
-                PackageManager pm = getInstance().mContext.get().getPackageManager();
-                PackageInfo pmInfo = pm.getPackageArchiveInfo(skinPkgPath, PackageManager.GET_ACTIVITIES);
-
-                AssetManager assetManager = AssetManager.class.newInstance();
-                Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
-                addAssetPath.invoke(assetManager, skinPkgPath);
-
-                Resources superRes = getInstance().mContext.get().getResources();
-                Resources skinResource = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
-
-                // 判断是否需要修改分辨率
-                if (getInstance().baseInch > 0) {
-                    setCustomDensity(skinResource.getDisplayMetrics(), skinResource);
-                }
-
-                getInstance().skinPackageName = pmInfo.packageName;
-                getInstance().skinPath = skinPkgPath;
-                getInstance().isDefaultSkin = false;
-
-                return skinResource;
-
-            } catch (Exception e) {
-                SkinLog.e(e.getMessage());
-            }
-
-            return null;
-        }
-
-        private void setCustomDensity(DisplayMetrics metrics, Resources resources) {
-            try {
-                float density = metrics.density;
-                float scaledDensity = metrics.scaledDensity;
-                float targetDensity = metrics.widthPixels / getInstance().baseInch;
-                float targetScaledDensity = targetDensity * (scaledDensity / density);
-                int targetDensityDpi = (int) (160f * targetDensity);
-
-                DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-                displayMetrics.density = targetDensity;
-                displayMetrics.scaledDensity = targetScaledDensity;
-                displayMetrics.densityDpi = targetDensityDpi;
-
-            } catch (Exception e) {
-                SkinLog.e(e.getMessage());
-            }
-        }
-
+    public void setResources(boolean isDefault, Resources resources) {
+        this.isDefaultSkin = isDefault;
+        this.mResources = resources;
     }
 
     @Override
     public void attach(ISkinUpdate observer) {
-        if (skinObservers == null) {
-            skinObservers = new ArrayList<>();
+        if (null == skinObservers) {
+            skinObservers = new SparseArray<>();
         }
 
-        if (!skinObservers.contains(observer)) {
-            skinObservers.add(observer);
+        if (null == observer) {
+            return;
         }
+
+        skinObservers.put(observer.getKey(), new WeakReference<>(observer));
     }
 
     @Override
     public void detach(ISkinUpdate observer) {
-        if (skinObservers == null) return;
+        if (null == skinObservers) return;
+        if (null == observer) return;
 
-        if (skinObservers.contains(observer)) {
-            skinObservers.remove(observer);
-        }
+        skinObservers.remove(observer.getKey());
     }
 
     @Override
     public void notifySkinUpdate() {
-        if (skinObservers == null) return;
+        if (null == skinObservers) return;
 
-        for (ISkinUpdate observer : skinObservers) {
-            observer.onThemeUpdate();
+        ISkinUpdate mISkinUpdate;
+
+        int size = skinObservers.size();
+        for (int i = 0; i < size; i++) {
+            mISkinUpdate = skinObservers.valueAt(i).get();
+
+            if (null != mISkinUpdate) {
+                mISkinUpdate.onThemeUpdate();
+            }
         }
     }
-
 
     /***********动态获取资源************/
 

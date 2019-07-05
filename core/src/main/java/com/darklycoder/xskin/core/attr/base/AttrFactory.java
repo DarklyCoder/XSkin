@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.darklycoder.xskin.core.attr.BackgroundAttr;
 import com.darklycoder.xskin.core.attr.ButtonAttr;
-import com.darklycoder.xskin.core.attr.DividerAttr;
 import com.darklycoder.xskin.core.attr.DrawableBottomAttr;
 import com.darklycoder.xskin.core.attr.DrawableEndAttr;
 import com.darklycoder.xskin.core.attr.DrawableLeftAttr;
@@ -38,7 +37,6 @@ public class AttrFactory {
         TEXT_COLOR_HINT_LIGHT("textColorHighlight"),
         TEXT_CURSOR_DRAWABLE("textCursorDrawable"),
         LIST_SELECTOR("listSelector"),
-        DIVIDER("divider"),
         SRC("src"),
         DRAWABLE_LEFT("drawableLeft"),
         DRAWABLE_TOP("drawableTop"),
@@ -74,6 +72,7 @@ public class AttrFactory {
     public enum ResType {
         COLOR("color"),
         DRAWABLE("drawable"),
+        MIPMAP("mipmap"),
         DIMEN("dimen"),
         STRING("string"),
         ID("id"),
@@ -125,9 +124,6 @@ public class AttrFactory {
                     break;
                 case LIST_SELECTOR:
                     mSkinAttr = new ListSelectorAttr();
-                    break;
-                case DIVIDER:
-                    mSkinAttr = new DividerAttr();
                     break;
                 case SRC:
                     mSkinAttr = new SrcAttr();

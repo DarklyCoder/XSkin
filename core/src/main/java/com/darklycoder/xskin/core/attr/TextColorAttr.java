@@ -5,9 +5,11 @@ import android.widget.TextView;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.loader.SkinManager;
-import com.darklycoder.xskin.core.util.SkinLog;
+import com.darklycoder.xskin.core.SkinManager;
 
+/**
+ * 支持 TextView 的 "color" 属性
+ */
 public class TextColorAttr extends SkinAttr {
 
     @Override
@@ -17,7 +19,6 @@ public class TextColorAttr extends SkinAttr {
 
             if (attrValueType == AttrFactory.ResType.COLOR) {
                 textView.setTextColor(SkinManager.getInstance().convertToColorStateList(attrValueRefId));
-                SkinLog.i("attr", "apply: TextColorAttr - " + attrValueType);
             }
         }
     }

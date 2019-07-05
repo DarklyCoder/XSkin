@@ -1,10 +1,22 @@
 package com.darklycoder.xskin.core.listener;
 
+/**
+ * 皮肤更新回调
+ */
 public interface ISkinLoader {
 
-	void attach(ISkinUpdate observer);
+    /**
+     * 加入监听
+     */
+    void attach(ISkinUpdate observer);
 
-	void detach(ISkinUpdate observer);
+    /**
+     * 取消监听
+     */
+    void detach(ISkinUpdate observer);
 
-	void notifySkinUpdate();
+    /**
+     * 通知回调
+     */
+    void notifySkinUpdate();
 }
