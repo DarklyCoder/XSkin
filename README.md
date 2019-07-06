@@ -5,7 +5,7 @@
 ## **XSkin 导入**
 
 ```
-implementation 'com.darklycoder.lib:XSkin:1.0.3'
+implementation 'com.darklycoder.lib:XSkin:1.0.4'
 ```
 
 ## **XSkin的使用方法**
