@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 /**
  * 支持 ImageView 的 "src" 属性

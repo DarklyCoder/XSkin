@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.darklycoder.xskin.core.attr.base.DynamicAttr;
 import com.darklycoder.xskin.core.listener.IDynamicNewView;
@@ -42,28 +41,13 @@ public class SkinFragment extends Fragment implements IDynamicNewView {
         super.onDestroyView();
     }
 
-    private void removeAllView(View v) {
-        if (v instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) v;
-            int size = viewGroup.getChildCount();
-            for (int i = 0; i < size; i++) {
-                removeAllView(viewGroup.getChildAt(i));
-            }
-
-            removeViewInSkinInflaterFactory(v);
-            return;
-        }
-
-        removeViewInSkinInflaterFactory(v);
-    }
-
     /**
      * 此方法用于Activity中Fragment销毁的时候，移除Fragment中的View
      */
-    private void removeViewInSkinInflaterFactory(View v) {
+    private void removeAllView(View v) {
         LayoutInflater.Factory2 factory = getActivity().getLayoutInflater().getFactory2();
         if (factory instanceof SkinInflaterFactory) {
-            ((SkinInflaterFactory) factory).removeSkinView(v);
+            ((SkinInflaterFactory) factory).removeAllSkinView(v);
         }
     }
 

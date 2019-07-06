@@ -5,7 +5,7 @@ import android.widget.SeekBar;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 /**
  * 支持 SeekBar 的 "thumb"属性

@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.AbsListView;
 
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 public class ListSelectorAttr extends SkinAttr {
 

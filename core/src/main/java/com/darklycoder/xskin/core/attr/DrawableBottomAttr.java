@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 /**
  * 支持 "drawableBottom" 属性

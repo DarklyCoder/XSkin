@@ -2,29 +2,30 @@ package com.darklycoder.xskin.core.util;
 
 import android.util.Log;
 
+import com.darklycoder.xskin.core.config.SkinConfig;
+
 public class SkinLog {
 
-    private static final boolean DEBUG = true;
-    private static final String TAG = "SkinLoader";
+    private static final String TAG = "XSkin";
 
     private SkinLog() {
         throw new AssertionError();
     }
 
     public static void i(String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.i(TAG, msg);
         }
     }
 
     public static void d(String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.d(TAG, msg);
         }
     }
 
     public static void w(String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.w(TAG, msg);
         }
     }
@@ -34,19 +35,19 @@ public class SkinLog {
     }
 
     public static void i(String tag, String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.i(tag, msg);
         }
     }
 
     public static void d(String tag, String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.d(tag, msg);
         }
     }
 
     public static void w(String tag, String msg) {
-        if (DEBUG) {
+        if (SkinConfig.DEBUG) {
             Log.w(tag, msg);
         }
     }

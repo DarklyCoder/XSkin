@@ -52,6 +52,10 @@ public class AttrFactory {
 
         private final String name;
 
+        public String getName() {
+            return name;
+        }
+
         Attr(String n) {
             name = n;
         }

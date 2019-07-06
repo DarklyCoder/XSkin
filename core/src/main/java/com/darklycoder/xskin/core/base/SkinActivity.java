@@ -5,11 +5,11 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.darklycoder.xskin.core.SkinManager;
 import com.darklycoder.xskin.core.attr.base.DynamicAttr;
 import com.darklycoder.xskin.core.listener.IDynamicNewView;
 import com.darklycoder.xskin.core.listener.ISkinUpdate;
 import com.darklycoder.xskin.core.loader.SkinInflaterFactory;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public abstract class SkinActivity extends AppCompatActivity implements ISkinUpd
 
     @Override
     public void dynamicAddView(View view, List<DynamicAttr> attrs) {
-        mSkinInflaterFactory.dynamicAddSkinEnableView(this, view, attrs);
+        mSkinInflaterFactory.dynamicAddSkinView(this, view, attrs);
     }
 
 }

@@ -3,21 +3,26 @@
     xmlns:skin="http://schemas.android.com/darklycoder/xskin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
-    android:orientation="horizontal"
-    skin:enable="true">
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#EEE"
+        android:paddingBottom="10dp" />
 
     <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:background="#FFF"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/btn_normal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/color_theme"
             android:gravity="center"
@@ -27,10 +32,10 @@
 
         <TextView
             android:id="@+id/btn_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@color/color_theme"
             android:gravity="center"
@@ -40,8 +45,8 @@
 
         <TextView
             android:id="@+id/btn_custom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/color_theme"
             android:gravity="center"
@@ -50,10 +55,5 @@
             skin:enable="true" />
 
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/fl_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.darklycoder.xskin.core.attr;
 import android.view.View;
 
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 /**
  * 支持 "background" 属性

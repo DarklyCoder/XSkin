@@ -2,7 +2,7 @@ package com.darklycoder.xskin;
 
 import android.os.Bundle;
 
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 import com.darklycoder.xskin.core.base.SkinActivity;
 import com.darklycoder.xskin.core.config.SkinConfig;
 import com.darklycoder.xskin.fragments.IndexFragment;

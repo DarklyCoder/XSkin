@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="test_txt">
+        <item name="android:drawableLeft">@drawable/ic_dog</item>
+        <item name="android:textColor">@color/color_theme</item>
+        <item name="android:background">@color/color_bg</item>
+    </style>
+
 </resources>

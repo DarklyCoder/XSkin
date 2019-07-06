@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.darklycoder.xskin.core.attr.base.AttrFactory;
 import com.darklycoder.xskin.core.attr.base.SkinAttr;
-import com.darklycoder.xskin.core.SkinManager;
+import com.darklycoder.xskin.core.loader.SkinManager;
 
 /**
  * 支持 TextView 的 "textColorHint" 属性
@@ -18,7 +18,7 @@ public class TextColorHintAttr extends SkinAttr {
             TextView textView = (TextView) view;
 
             if (attrValueType == AttrFactory.ResType.COLOR) {
-                textView.setHintTextColor(SkinManager.getInstance().convertToColorStateList(attrValueRefId));
+                textView.setHintTextColor(SkinManager.getInstance().getColorStateList(attrValueRefId));
             }
         }
     }
