@@ -2,6 +2,7 @@ package com.darklycoder.xskin.core.loader;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 
@@ -137,6 +138,13 @@ public class SkinManager implements ISkinLoader {
         this.mSkinInfo = info;
 
         notifySkinUpdate();
+    }
+
+    /**
+     * 获取Resources
+     */
+    public Resources getResoures() {
+        return isExternalSkin() ? mSkinInfo.resources : mContext.get().getResources();
     }
 
     /***********动态获取资源************/
